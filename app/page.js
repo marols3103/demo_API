@@ -1,95 +1,51 @@
-import Image from "next/image";
-import styles from "./page.module.css";
-
+'use client'
+import { useEffect, useState } from 'react';
+import Loading from './component/loading';
+import styles from './page.module.css';
 export default function Home() {
+ 
+  const [data, setData]     = useState(null);
+  const [country,setCountry]  = useState('paris')
+  const [load,setLoad] = useState(true)
+  let meteo = async()=>{
+    let nom = 'marolahy pierre'
+    const url = "https://api.openweathermap.org/data/2.5/weather?q="+country+"&appid=ce7cc3a600a92b7fe86f7b0255f2906f";
+    let res    = await fetch(url)
+    let valeur = await res.json();
+    const temperatureCelsius = valeur.main.temp - 273;
+    valeur.main.temp = temperatureCelsius
+    console.log(valeur)
+    console.log(nom.trim());
+    setData(valeur);
+    setLoad(false)
+  }
+
+  useEffect(()=>{
+    meteo()
+  },[country])
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
+    <div className={styles.div}>
+        
+        <h2>Afficher la météo</h2>
+        <select
+          name = "ville"
+          id="ville"
+          onChange={(e)=>{
+            setCountry(e.target.value)
+          }}
         >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+          <option value="paris">Paris</option>
+          <option value="lyon">lyon</option>
+          <option value="marseille">Marseille</option>
+          <option value="toulouse">Toulouse</option>
+        </select>
+        <p>{
+          load?
+            (<Loading/>)
+            :(data && data.name +":" + data.main.temp +"°" )
+        } </p>
+       
+    </div>
   );
 }
