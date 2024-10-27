@@ -39,6 +39,7 @@ export default function Home() {
           <option value="lyon">lyon</option>
           <option value="marseille">Marseille</option>
           <option value="toulouse">Toulouse</option>
+          <option value="tanger">Tanger</option>
         </select>
         <p>{
           load?
