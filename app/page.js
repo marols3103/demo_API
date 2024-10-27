@@ -27,7 +27,7 @@ export default function Home() {
   return (
     <div className={styles.div}>
         
-        <h2>Afficher la météo</h2>
+        <h2>Afficher la météo d'aujourd'hui</h2>
         <select
           name = "ville"
           id="ville"
